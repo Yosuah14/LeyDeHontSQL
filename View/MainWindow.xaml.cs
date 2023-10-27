@@ -45,15 +45,26 @@ namespace LeyDeHont
             {
                 MessageBox.Show("Por favor, complete todos los campos antes de agregar una nueva entrada.");
             }
-            else if (dgvPeople.Items.Count >= 10)
+            else if (dgvPeople.Items.Count > 10)
             {
                 MessageBox.Show("No se pueden agregar más de 10 partidos.");
             }
             else
             {
+                if (dgvPeople.Items.Count == 10)
+                {
+                    simulation.IsEnabled = true;
+                }
+                else
+                {
+                    p.addParties(acronimo.Text, nPartido.Text, txtPresidente.Text);                 
+                    dgvPeople.Items.Refresh();
+
+
+                }
                 // Todos los campos están llenos y no se ha alcanzado el límite de 10 partidos, puedes agregar la entrada
-                p.addParties(acronimo.Text, nPartido.Text, txtPresidente.Text);
-                dgvPeople.Items.Refresh();
+ 
+
             }
 
         }
@@ -64,6 +75,7 @@ namespace LeyDeHont
             foreach (DatosPartido partido in partidosABorrar)
             {
                 p.removeParties(partido);
+                p.pm.listParties.Remove(partido);
             }
 
             dgvPeople.Items.Refresh();
@@ -78,9 +90,10 @@ namespace LeyDeHont
             if (!string.IsNullOrEmpty(TextBox1.Text) && !string.IsNullOrEmpty(TextBox2.Text) && !string.IsNullOrEmpty(TextBox3.Text) &&
                 int.TryParse(TextBox1.Text, out text1) && int.TryParse(TextBox2.Text, out text2) && int.TryParse(TextBox3.Text, out text3))
             {
+                PreviousData p;
                 // Todos los TextBox contienen números válidos
-
-                PreviousData p = new PreviousData(text1, text2, text3);
+                int validvotes= PreviousData.calculatevalidvotes(text1, text2, text3);
+                 p = new PreviousData(text1, text2, text3,validvotes);
 
                 // Habilitar las pestañas "PARTIES MANAGEMENT" y "SIMULATION"
                 managment.IsEnabled = true;
@@ -122,6 +135,7 @@ namespace LeyDeHont
                 double.TryParse(TextBox3.Text, out text3);
                 text3 = PreviousData.CalculateNullVotes(text1, text2);
                 TextBox3.Text = text3.ToString();
+
             }
             else
             {
