@@ -146,8 +146,43 @@ namespace LeyDeHont
             }
 
         }
+        private void Simulate_Click(object sender, RoutedEventArgs e)
+        {
+            PreviousData pd = new PreviousData(); // Creas una instancia de PreviousData
+
+            // Obtiene los valores necesarios para inicializar PreviousData y luego la utilizas
+            int text1, text2, text3;
+
+            if (!string.IsNullOrEmpty(TextBox1.Text) && !string.IsNullOrEmpty(TextBox2.Text) && !string.IsNullOrEmpty(TextBox3.Text) &&
+                int.TryParse(TextBox1.Text, out text1) && int.TryParse(TextBox2.Text, out text2) && int.TryParse(TextBox3.Text, out text3))
+            {
+                int validVotes = PreviousData.calculatevalidvotes(text1, text2, text3);
+                pd = new PreviousData(text1, text2, text3, validVotes);
+            }
+            else
+            {
+                // Manejo de error si los valores no son válidos
+                return;
+            }
+
+            List<DatosPartido> listaDePartidosIni = p.pm.listParties;
+            List<DatosPartido> listaDePartidosFinal = p.pm.listParties;
+            // Utilizas el método PartidosFactory.inicialiteParties con los datos requeridos
+            listaDePartidosIni = PartidosFactory.inicialiteParties(pd, listaDePartidosIni);
+            listaDePartidosFinal = PartidosFactory.inicialiteParties(pd, listaDePartidosFinal);
+
+            listaDePartidosFinal =DatosPartido.seatsTotalCount(listaDePartidosIni, listaDePartidosFinal);
+
+            // Creando una nueva lista para combinar los datos
+      
+
+            // Asignando la nueva lista a la fuente de datos del DataGrid
+            dgvParties.ItemsSource = listaDePartidosFinal;
+        }
+
 
 
     }
+
 }
 

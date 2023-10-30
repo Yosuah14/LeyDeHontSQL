@@ -13,6 +13,7 @@ namespace LeyDeHont.Domain
         public string Nombre { get; set; }
         public string Presidente { get; set; }
         public int votes {  get; set; }
+        public int  seats { get; set; }
         public PartiesManage pm { get; set; }
   
 
@@ -38,6 +39,16 @@ namespace LeyDeHont.Domain
             pm = new PartiesManage();
             this.votes = votes;
         }
+        public DatosPartido(string acronimo, string nombre, string presidente, int votes,int seats)
+        {
+            Acronimo = acronimo;
+            Nombre = nombre;
+            Presidente = presidente;
+            pm = new PartiesManage();
+            this.votes = votes;
+            this.seats = seats;
+        }
+
 
 
         public List<DatosPartido> getListParties()
@@ -61,9 +72,39 @@ namespace LeyDeHont.Domain
             int votes = (int)Math.Round(votesDouble); // Redondeo y conversión a int
             return votes;
         }
-        
-
+        private static int seatsCount(DatosPartido p)
+        {
+            p.seats++;
+            int votes = p.votes / (p.seats + 1);
+            return votes;
         }
+
+        public static List<DatosPartido> seatsTotalCount(List<DatosPartido>parties, List<DatosPartido> parties2)
+
+        {
+            int aux = 0;
+           const int SEATS= 37;
+           for (int i = 0; i <= SEATS; i++) {
+
+                //Busca el objeto con mayores votos
+                int indexOfPartyWithMostVotes = parties.FindIndex(c => c.votes == parties.Max(car => car.votes));
+                aux = DatosPartido.seatsCount(parties[indexOfPartyWithMostVotes]);
+                parties[indexOfPartyWithMostVotes].votes = aux;
+
+
+            }
+           //Asiciamos los votos inicales
+            for (int i = 0; i < parties.Count; i++)
+            {
+                parties[i].votes = parties2[i].votes;
+            }
+            return parties;
+        }
+
+
+
+
+    }
 
 
     }
