@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace LeyDeHont.Domain
 {
@@ -79,27 +80,26 @@ namespace LeyDeHont.Domain
             return votes;
         }
 
-        public static List<DatosPartido> seatsTotalCount(List<DatosPartido>parties, List<DatosPartido> parties2)
-
+        public static List<DatosPartido> CalculateSeats(List<DatosPartido> parties)
         {
-            int aux = 0;
-           const int SEATS= 37;
-           for (int i = 0; i <= SEATS; i++) {
-
-                //Busca el objeto con mayores votos
-                int indexOfPartyWithMostVotes = parties.FindIndex(c => c.votes == parties.Max(car => car.votes));
-                aux = DatosPartido.seatsCount(parties[indexOfPartyWithMostVotes]);
-                parties[indexOfPartyWithMostVotes].votes = aux;
-
-
-            }
-           //Asiciamos los votos inicales
-            for (int i = 0; i < parties.Count; i++)
+            const int SEATS = 37;
+            for (int seat = 0; seat < SEATS; seat++)
             {
-                parties[i].votes = parties2[i].votes;
-            }
+                // Encontrar el partido con más votos en la lista calculada
+                int indexOfPartyWithMostVotes = parties.FindIndex(p => p.votes ==parties.Max(party => party.votes));
+
+                // Realizar el cálculo para asignar asientos al partido
+                int seatsCount = DatosPartido.seatsCount(parties[indexOfPartyWithMostVotes]);
+                parties[indexOfPartyWithMostVotes].votes = seatsCount;
+            }       
             return parties;
         }
+     
+
+
+
+
+
 
 
 
@@ -107,6 +107,6 @@ namespace LeyDeHont.Domain
     }
 
 
-    }
+}
 
 
