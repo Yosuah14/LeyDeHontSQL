@@ -17,7 +17,7 @@ namespace LeyDeHont.Domain
         public int  seats { get; set; }
         public PartiesManage pm { get; set; }
   
-
+        public int votesaux { get; set; }
         public DatosPartido()
         {
 
@@ -32,15 +32,16 @@ namespace LeyDeHont.Domain
             pm = new PartiesManage();
         }
 
-        public DatosPartido(string acronimo, string nombre, string presidente,int votes)
+        public DatosPartido(string acronimo, string nombre, string presidente,int votes, int votesaux)
         {
             Acronimo = acronimo;
             Nombre = nombre;
             Presidente = presidente;
             pm = new PartiesManage();
             this.votes = votes;
+            this.votesaux = votesaux;
         }
-        public DatosPartido(string acronimo, string nombre, string presidente, int votes,int seats)
+        public DatosPartido(string acronimo, string nombre, string presidente, int votes, int votesaux,int seats)
         {
             Acronimo = acronimo;
             Nombre = nombre;
@@ -48,6 +49,7 @@ namespace LeyDeHont.Domain
             pm = new PartiesManage();
             this.votes = votes;
             this.seats = seats;
+            this.votesaux = votesaux;
         }
 
 
@@ -86,11 +88,11 @@ namespace LeyDeHont.Domain
             for (int seat = 0; seat < SEATS; seat++)
             {
                 // Encontrar el partido con más votos en la lista calculada
-                int indexOfPartyWithMostVotes = parties.FindIndex(p => p.votes ==parties.Max(party => party.votes));
+                int indexOfPartyWithMostVotes = parties.FindIndex(p => p.votesaux ==parties.Max(party => party.votesaux));
 
                 // Realizar el cálculo para asignar asientos al partido
                 int seatsCount = DatosPartido.seatsCount(parties[indexOfPartyWithMostVotes]);
-                parties[indexOfPartyWithMostVotes].votes = seatsCount;
+                parties[indexOfPartyWithMostVotes].votesaux = seatsCount;
             }       
             return parties;
         }

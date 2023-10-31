@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="MADRID ELECTIONS" FontSize="24" FontFamily="Sans-Serif" FontWeight="DemiBold" HorizontalAlignment="Center" Margin="0,59,0,35" Width="235"/>
-        <Image HorizontalAlignment="Left" Height="77" Margin="136,35,0,0" VerticalAlignment="Top" Width="110" Source="/Imagenes/ESPAÑA.jpg"/>
+        <Image x:Name="imagen" HorizontalAlignment="Left" Height="78" Margin="115,35,0,0" VerticalAlignment="Top" Width="131" Source="/Imagenes/España.jpg"/>
 
         <TabControl Grid.Row="1" TabStripPlacement="left" Margin="80,26,90,25">
             <TabControl.Resources>
@@ -52,13 +52,13 @@
                     </DataGrid>
                     <StackPanel Orientation="Vertical" Grid.Column="1">
                         <Label Content="Acronimo" FontWeight="Bold" Margin=" 5" HorizontalAlignment="Center"/>
-                        <TextBox x:Name="acronimo" Margin="20"></TextBox>
+                        <TextBox x:Name="acronimo" Margin="5"></TextBox>
                         <Label Content="Nombre del partido" FontWeight="Bold" Margin=" 5" HorizontalAlignment="Center"/>
-                        <TextBox x:Name="nPartido" Margin="20"></TextBox>
+                        <TextBox x:Name="nPartido" Margin="5"></TextBox>
                         <Label Content="Presidente" FontWeight="Bold" Margin=" 5" HorizontalAlignment="Center"/>
-                        <TextBox x:Name="txtPresidente" Margin="20"></TextBox>
-                        <Button x:Name="btnExample" Margin="10" Content="Insertar" Click="btnExample_Click"/>
-                        <Button x:Name="btnBorrado" Margin="10" Content="Borrar" Click="btnBorrar_Click" Visibility="Collapsed" />
+                        <TextBox x:Name="txtPresidente" Margin="5"></TextBox>
+                        <Button x:Name="btnExample" Margin="5" Content="Insertar" Click="btnInsert_Click"/>
+                        <Button x:Name="btnBorrado" Margin="5" Content="Borrar" Click="btnBorrar_Click" Visibility="Collapsed" />
                     </StackPanel>
                 </Grid>
             </TabItem>
@@ -73,6 +73,7 @@
 
                     <!-- Botón "Simulate" -->
                     <Button x:Name="simulateButton" Content="Simulate" Grid.Row="0" Click="Simulate_Click"  HorizontalAlignment="Left" Margin="61,5,0,10" Width="55" />
+                    <Button x:Name="backButton" Content="Back" Grid.Row="0" Click="Back_Click"  HorizontalAlignment="Right" Margin="0,5,107,10" Width="55" Visibility="Collapsed" />
 
                     <!-- Label "37 seats" -->
                     <Label Content="37 seats" Grid.Row="0" HorizontalAlignment="Left" Margin="144,0,0,10" Width="67" />
@@ -83,7 +84,7 @@
                             <DataGridTextColumn Header="Party" Binding="{Binding Nombre}" Width="*"  />
                             <DataGridTextColumn Header="Votes" Binding="{Binding votes }" Width="*"  />
                             <DataGridTextColumn Header="Seats" Binding="{Binding seats}" Width="*"  />
-                        
+
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

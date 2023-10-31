@@ -27,7 +27,7 @@ namespace LeyDeHont.Domain
             {
                 if (part.votes >= minvotes) 
                 {
-                    
+                    part.votesaux = part.votes;
                  updateParties.Add(part);
                 }
             }
