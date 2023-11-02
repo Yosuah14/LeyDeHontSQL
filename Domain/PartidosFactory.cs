@@ -23,6 +23,7 @@ namespace LeyDeHont.Domain
             parties[7].votes = DatosPartido.calculateVotesPartie(0.005, p);
             parties[8].votes = DatosPartido.calculateVotesPartie(0.0025, p);
             parties[9].votes = DatosPartido.calculateVotesPartie(0.0025, p);
+            
             List < DatosPartido > updateParties=new List<DatosPartido>(); 
             //Añado a la nueva lista los votos que superan el 3 por ciento de los votos totales
             foreach (var part in parties)
@@ -33,6 +34,7 @@ namespace LeyDeHont.Domain
                     updateParties.Add(part);
                 }
             }
+           
            return updateParties;
         }
         

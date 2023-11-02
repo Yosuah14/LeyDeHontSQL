@@ -76,6 +76,7 @@ namespace LeyDeHont
                         dgvParties.Items.Refresh();
                         managment.IsEnabled = false;
                         previousdata.IsEnabled = false;
+                        blanco.Content = "Los votos en blanco son " + Convert.ToInt32(pd.valid_votes * 0.05);
                         simulation.Focus();
                 }
                     else

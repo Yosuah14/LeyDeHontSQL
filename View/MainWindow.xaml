@@ -71,11 +71,12 @@
                     </Grid.RowDefinitions>
 
                     <!-- Botón "Simulate" -->
-                    <Button x:Name="simulateButton" Content="Simulate" Grid.Row="0" Click="Simulate_Click"  HorizontalAlignment="Left" Margin="61,5,0,10" Width="55" />
+                    <Button x:Name="simulateButton" Content="Simulate" Grid.Row="0" Click="Simulate_Click"  HorizontalAlignment="Left" Margin="10,5,0,10" Width="55" />
                     <Button x:Name="backButton" Content="Back" Grid.Row="0" Click="Back_Click"  HorizontalAlignment="Right" Margin="0,5,107,10" Width="55" Visibility="Collapsed" />
 
                     <!-- Label "37 seats" -->
-                    <Label Content="37 seats" Grid.Row="0" HorizontalAlignment="Left" Margin="144,0,0,10" Width="67" />
+                    <Label Content="37 seats" Grid.Row="0" HorizontalAlignment="Left" Margin="70,3,0,7" Width="67" />
+                    <Label x:Name="blanco" Content="" Grid.Row="0" HorizontalAlignment="Center" Margin="0,3,0,10" Width="214" />
 
                     <!-- DataGrid -->
                     <DataGrid x:Name="dgvParties" Grid.Row="1" AutoGenerateColumns="False">
@@ -83,7 +84,6 @@
                             <DataGridTextColumn Header="Party" Binding="{Binding Nombre}" Width="*"  />
                             <DataGridTextColumn Header="Votes" Binding="{Binding votes }" Width="*"  />
                             <DataGridTextColumn Header="Seats" Binding="{Binding seats}" Width="*"  />
-
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
