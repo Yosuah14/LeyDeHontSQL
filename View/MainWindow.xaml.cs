@@ -3,41 +3,34 @@ using LeyDeHont.Persistence.Manages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
 namespace LeyDeHont
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    /*
+     * Clase donde se ejecuta la aplicacion
+     */
     public partial class MainWindow : Window
     {
+        //Variables
         DatosPartido p;
         Boolean vista;
         public MainWindow()
         {
             InitializeComponent();
-            PartiesManage pm = new PartiesManage();
+            PartiesManage pm = new PartiesManage();          
             TextBox2.TextChanged += changeNullVotes;
             TextBox3.TextChanged += changeNullVotes;
             p = new DatosPartido();
             dgvPeople.ItemsSource = p.getListParties();
         }
+        //Metodo para insertar partidos
         private void btnInsert_Click(object sender, RoutedEventArgs e)
         {
-
+            //Comprobamos que la lista no sea nula
             if (p.pm.listParties ==null)
             {
+                //Ponemos vista a true para que no haga el foco cuando insertes el primer partido
                 vista = true;
                 p = new DatosPartido();
                 dgvPeople.ItemsSource = p.getListParties();
@@ -46,20 +39,20 @@ namespace LeyDeHont
                 {
                     previousdata.Focus();
                     vista = true;
-
                 }
                 
             }
-
+            //Contralos que se completen los 3 campos
             if (string.IsNullOrEmpty(acronimo.Text) || string.IsNullOrEmpty(nPartido.Text) || string.IsNullOrEmpty(txtPresidente.Text))
                 {
                     MessageBox.Show("Por favor, complete todos los campos antes de agregar una nueva entrada.");
-                }
-               
+                }       
                 else
                 {
+                
                     if (dgvPeople.Items.Count > 9)
                     {
+                    //Inicializamos el objeto de datos previos
                         PreviousData pd = new PreviousData();
                         int text1, text2, text3;
 
@@ -74,7 +67,9 @@ namespace LeyDeHont
                             // Manejo de error si los valores no son válidos
                             return;
                         }
+                        //Anicializamos la lista
                         List<DatosPartido> listaDePartidosF = p.pm.listParties;
+                        //Añadimos los votos validos
                         listaDePartidosF = PartidosFactory.inicialiteParties(pd, listaDePartidosF);
                         simulation.IsEnabled = true;
                         dgvParties.ItemsSource = listaDePartidosF;
@@ -88,21 +83,23 @@ namespace LeyDeHont
                         p.addParties(acronimo.Text, nPartido.Text, txtPresidente.Text);
                         dgvPeople.Items.Refresh();
                     }
-                    // Todos los campos están llenos y no se ha alcanzado el límite de 10 partidos, puedes agregar la entrada
-               
-            }
-           
+                    // Todos los campos están llenos y no se ha alcanzado el límite de 10 partidos, puedes agregar la entrada              
+            }          
         }
+        //Boton de borrar
         private void btnBorrar_Click(object sender, RoutedEventArgs e)
         {
+            //hacemos un casteo de los datos seleccionados
             List<DatosPartido> partidosABorrar = dgvPeople.SelectedItems.Cast<DatosPartido>().ToList();
             foreach (DatosPartido partido in partidosABorrar)
             {
+                //removemos los partidos de ambas listas
                 p.removeParties(partido);
                 p.pm.listParties.Remove(partido);
             }
             dgvPeople.Items.Refresh();
         }
+        //Boton para guardas los datos previos
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             int text1=0, text2=0, text3;
@@ -111,34 +108,33 @@ namespace LeyDeHont
                 int.TryParse(TextBox1.Text, out text1) && int.TryParse(TextBox2.Text, out text2) && int.TryParse(TextBox3.Text, out text3)&&text1 > text2)
             {
                 PreviousData p;
-                // Todos los TextBox contienen números válidos
+                // Calculamos los datos validos
                 int validvotes= PreviousData.calculatevalidvotes(text1, text2, text3);
                  p = new PreviousData(text1, text2, text3,validvotes);
                 // Habilitar las pestañas "PARTIES MANAGEMENT" y "SIMULATION"
                 managment.IsEnabled = true;
                 managment.IsSelected = true;
+                previousdata.IsEnabled = false;
             }
             else
             {
                 if ((string.IsNullOrEmpty(TextBox2.Text) && string.IsNullOrEmpty(TextBox3.Text))||text2==0)
                 {
+                    //Comprobamos que sea numeors
                     MessageBox.Show("Uno o más de los valores en las cajas de texto no son números enteros válidos o están vacíos.");
                     managment.IsEnabled = false;
-                    simulation.IsEnabled = false;
-                   
+                    simulation.IsEnabled = false;                  
                 }
                 if (text1 < text2)
                 {
+                    //Comprobamos que los Abstetions votes sean menores que population
                     MessageBox.Show("No puede ser el numero de  ABSTENTIONS VOTES mayor que POPULATION");
                     managment.IsEnabled = false;
                     simulation.IsEnabled = false;
-
-                }
-             
+                }         
             }
-            // Establecer el foco en la pestaña "PARTIES MANAGEMENT"
         }
-
+        //Metodo para ocultar el boton de borrado
         private void dgvPeople_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (dgvPeople.SelectedItem != null)
@@ -152,6 +148,7 @@ namespace LeyDeHont
                 btnBorrado.Visibility = Visibility.Collapsed;
             }
         }
+        //Calcular los btoso nulos
         private void changeNullVotes(object sender, RoutedEventArgs e)
         {
             int text1;
@@ -173,10 +170,11 @@ namespace LeyDeHont
                 simulation.IsEnabled = false;
                 MessageBox.Show("Los valores en las cajas de texto no son números enteros válidos.");
             }
-
         }
+        //Boton de simualacion
         private void Simulate_Click(object sender, RoutedEventArgs e)
         {
+            //Si es nulo es decir has pulsado dos veces seguidas el boton de simulate te vuelve al princpio para comprobar la simulacion
             if (p.pm.listParties==null) {
                 dgvParties.ItemsSource = null;
                 MessageBox.Show("Neceistas cambiar los datos de la simulacion para hacer otra");
@@ -187,9 +185,9 @@ namespace LeyDeHont
             }
             else
             {
-                  PreviousData pd = new PreviousData(); // Creas una instancia de PreviousData
+                  PreviousData pd = new PreviousData(); // Creo una instancia de PreviousData
 
-            // Obtiene los valores necesarios para inicializar PreviousData y luego la utilizas
+            // Obtiene los valores necesarios para inicializar PreviousData y luego la utilizo
             int text1, text2, text3;
 
             if (!string.IsNullOrEmpty(TextBox1.Text) && !string.IsNullOrEmpty(TextBox2.Text) && !string.IsNullOrEmpty(TextBox3.Text) &&
@@ -205,17 +203,20 @@ namespace LeyDeHont
             }
             // Utilizas el método PartidosFactory.inicialiteParties con los datos requeridos
             List<DatosPartido> listaDePartidosIni = p.pm.listParties;
-            listaDePartidosIni = PartidosFactory.inicialiteParties(pd, listaDePartidosIni);           
+            listaDePartidosIni = PartidosFactory.inicialiteParties(pd, listaDePartidosIni); 
+            //Calculo los escaños
             listaDePartidosIni =DatosPartido.CalculateSeats(listaDePartidosIni);
             MessageBox.Show("Se ha reaizado la simulacion");
             dgvParties.ItemsSource = listaDePartidosIni;
             dgvParties.Items.Refresh();
+            //
             p.pm.listParties = null;
             dgvPeople.ItemsSource = null;
             
                 backButton.Visibility = Visibility.Visible;
             }          
         }
+        //Boton de back para volver atras cuando haces la simulacion
         private void Back_Click(object sender, RoutedEventArgs e)
         {
             dgvParties.ItemsSource = null;

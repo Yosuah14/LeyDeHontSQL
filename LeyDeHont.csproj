@@ -7,4 +7,14 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Imagenes\bandera.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Imagenes\bandera.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
 </Project>

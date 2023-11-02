@@ -14,8 +14,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="MADRID ELECTIONS" FontSize="24" FontFamily="Sans-Serif" FontWeight="DemiBold" HorizontalAlignment="Center" Margin="0,59,0,35" Width="235"/>
-        <Image x:Name="imagen" HorizontalAlignment="Left" Height="78" Margin="115,35,0,0" VerticalAlignment="Top" Width="131" Source="/Imagenes/España.jpg"/>
-
+        <Image Source="/Imagenes/bandera.jpg" VerticalAlignment="Center" Height="103" Margin="78,0,605,0" Visibility="Visible"/>
         <TabControl Grid.Row="1" TabStripPlacement="left" Margin="80,26,90,25">
             <TabControl.Resources>
                 <Style TargetType="TabItem">
