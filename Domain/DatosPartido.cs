@@ -1,6 +1,8 @@
 ﻿using LeyDeHont.Persistence.Manages;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 
 namespace LeyDeHont.Domain
@@ -8,59 +10,127 @@ namespace LeyDeHont.Domain
     /*
      * Clase que almacena los datos de un partido politico
      */
-    class DatosPartido
+    class DatosPartido: INotifyPropertyChanged
+
     {
-        public string Acronimo { get; set; }
-        public string Nombre { get; set; }
-        public string Presidente { get; set; }
-        public int votes {  get; set; }
-        public int  seats { get; set; }
-        public PartiesManage pm { get; set; }
-        public int votesaux { get; set; }
-        //Cosntructores
-        public DatosPartido()
+        public event PropertyChangedEventHandler PropertyChanged;
+        private string acronimo;
+        public string Acronimo
         {
-            pm = new PartiesManage();
-        }        public DatosPartido(string acronimo, string nombre, string presidente)
-        {
-            Acronimo = acronimo;
-            Nombre = nombre;
-            Presidente = presidente;
-            pm = new PartiesManage();
+            get { return acronimo; }
+            set
+            {
+                acronimo = value;
+                OnPropertyChange(nameof(Acronimo));
+            }
         }
 
-        public DatosPartido(string acronimo, string nombre, string presidente,int votes, int votesaux)
+        private string nombre;
+        public string Nombre
+        {
+            get { return nombre; }
+            set
+            {
+                nombre = value;
+                OnPropertyChange(nameof(Nombre));
+            }
+        }
+
+        private string presidente;
+        public string Presidente
+        {
+            get { return presidente; }
+            set
+            {
+                presidente = value;
+                OnPropertyChange(nameof(Presidente));
+            }
+        }
+
+        private int votes;
+        public int Votes
+        {
+            get { return votes; }
+            set
+            {
+                votes = value;
+                OnPropertyChange(nameof(Votes));
+            }
+        }
+
+        private int seats;
+        public int Seats
+        {
+            get { return seats; }
+            set
+            {
+                seats = value;
+                OnPropertyChange(nameof(Seats));
+            }
+        }
+
+        public PartiesManage Pm { get; set; }
+
+        private int votesaux;
+
+        public int VotesAux
+        {
+            get { return votesaux; }
+            set
+            {
+                votesaux = value;
+                OnPropertyChange(nameof(VotesAux));
+            }
+        }
+
+        // Constructores
+        public DatosPartido()
+        {
+            Pm = new PartiesManage();
+        }
+
+        public DatosPartido(string acronimo, string nombre, string presidente)
         {
             Acronimo = acronimo;
             Nombre = nombre;
             Presidente = presidente;
-            pm = new PartiesManage();
-            this.votes = votes;
-            this.votesaux = votesaux;
+            Pm = new PartiesManage();
         }
-        public DatosPartido(string acronimo, string nombre, string presidente, int votes, int votesaux,int seats)
+
+        public DatosPartido(string acronimo, string nombre, string presidente, int votes, int votesaux)
         {
             Acronimo = acronimo;
             Nombre = nombre;
             Presidente = presidente;
-            pm = new PartiesManage();
-            this.votes = votes;
-            this.seats = seats;
-            this.votesaux = votesaux;
+            Pm = new PartiesManage();
+            Votes = votes;
+            VotesAux = votesaux;
         }
+
+        public DatosPartido(string acronimo, string nombre, string presidente, int votes, int votesaux, int seats)
+        {
+            Acronimo = acronimo;
+            Nombre = nombre;
+            Presidente = presidente;
+            Pm = new PartiesManage();
+            Votes = votes;
+            Seats = seats;
+            VotesAux = votesaux;
+        }
+    
         public List<DatosPartido> getListParties()
         {
-            return pm.listParties;
+            return Pm.listParties;
         }
         //añadir partidos
         public void addParties(string name, string nPartido, string presidente)
         {
-            pm.addPartdio(name, nPartido, presidente);
+            Pm.addPartdio(name, nPartido, presidente);
         }
         //Borrar partidos de la lista
         public void removeParties(DatosPartido p)
         {
-            pm.listParties.Remove(p);
+            Pm.listParties.Remove(p);
         }
         //Calcular el porcentaje 
         public static int calculateVotesPartie(double percent,PreviousData p)
@@ -73,8 +143,8 @@ namespace LeyDeHont.Domain
         private static int seatsCount(DatosPartido p)
         {
             //Sumamos un escaño
-            p.seats++;
-            int votes = p.votes / (p.seats + 1);
+            p.Seats++;
+            int votes = p.Votes / (p.Seats + 1);
             return votes;
         }
         //Metodo para añadir los escaños a cada partido
@@ -85,12 +155,16 @@ namespace LeyDeHont.Domain
             for (int seat = 0; seat < SEATS; seat++)
             {
                 // Encontrar el partido con más votos en la lista calculada
-                int indexOfPartyWithMostVotes = parties.FindIndex(p => p.votesaux ==parties.Max(party => party.votesaux));
+                int indexOfPartyWithMostVotes = parties.FindIndex(p => p.VotesAux ==parties.Max(party => party.VotesAux));
                 // Realizar el cálculo para asignar asientos al partido
                 int seatsCount = DatosPartido.seatsCount(parties[indexOfPartyWithMostVotes]);
-                parties[indexOfPartyWithMostVotes].votesaux = seatsCount;
+                parties[indexOfPartyWithMostVotes].VotesAux = seatsCount;
             }       
             return parties;
+        }
+        private void OnPropertyChange(string propertyName)
+        {
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

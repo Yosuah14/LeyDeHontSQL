@@ -2,6 +2,7 @@
 using LeyDeHont.Persistence.Manages;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,6 +16,7 @@ namespace LeyDeHont
         //Variables
         DatosPartido p;
         Boolean vista;
+        private DatosPartidoVIEW model = new DatosPartidoVIEW();
         public MainWindow()
         {
             InitializeComponent();
@@ -28,7 +30,7 @@ namespace LeyDeHont
         private void btnInsert_Click(object sender, RoutedEventArgs e)
         {
             //Comprobamos que la lista no sea nula
-            if (p.pm.listParties ==null)
+            if (p.Pm.listParties ==null)
             {
                 //Ponemos vista a true para que no haga el foco cuando insertes el primer partido
                 vista = true;
@@ -68,7 +70,7 @@ namespace LeyDeHont
                             return;
                         }
                         //Anicializamos la lista
-                        List<DatosPartido> listaDePartidosF = p.pm.listParties;
+                        List<DatosPartido> listaDePartidosF = p.Pm.listParties;
                         //Añadimos los votos validos
                         listaDePartidosF = PartidosFactory.inicialiteParties(pd, listaDePartidosF);
                         simulation.IsEnabled = true;
@@ -81,7 +83,27 @@ namespace LeyDeHont
                 }
                     else
                     {
-                        p.addParties(acronimo.Text, nPartido.Text, txtPresidente.Text);
+                    if (model.Parties == null) model.Parties = new ObservableCollection<DatosPartido>();
+                    //Si el registro no existe, procedemos a crearlo
+                    if (model.Parties.Where(x => x.Nombre == model.Nombre).FirstOrDefault() == null)
+                    {
+                        model.Parties.Add(new DatosPartido
+                        {
+                            Nombre = model.Nombre,
+                            Acronimo = model.Acronimo,
+                            Presidente = model.Presidente,
+                            Seats = model.Seats,
+                            Votes=model.Votes
+                        }); 
+                        //una vez agregado el registro al modelo, lo agregamos a la BDD
+                        model.NewUser();
+                    }
+
+
+
+
+
+                    p.addParties(acronimo.Text, nPartido.Text, txtPresidente.Text);
                         dgvPeople.Items.Refresh();
                     }
                     // Todos los campos están llenos y no se ha alcanzado el límite de 10 partidos, puedes agregar la entrada              
@@ -96,7 +118,7 @@ namespace LeyDeHont
             {
                 //removemos los partidos de ambas listas
                 p.removeParties(partido);
-                p.pm.listParties.Remove(partido);
+                p.Pm.listParties.Remove(partido);
             }
             dgvPeople.Items.Refresh();
         }
@@ -176,7 +198,7 @@ namespace LeyDeHont
         private void Simulate_Click(object sender, RoutedEventArgs e)
         {
             //Si es nulo es decir has pulsado dos veces seguidas el boton de simulate te vuelve al princpio para comprobar la simulacion
-            if (p.pm.listParties==null) {
+            if (p.Pm.listParties==null) {
                 dgvParties.ItemsSource = null;
                 MessageBox.Show("Neceistas cambiar los datos de la simulacion para hacer otra");
                 simulation.IsEnabled=false;
@@ -203,7 +225,7 @@ namespace LeyDeHont
                 return;
             }
             // Utilizas el método PartidosFactory.inicialiteParties con los datos requeridos
-            List<DatosPartido> listaDePartidosIni = p.pm.listParties;
+            List<DatosPartido> listaDePartidosIni = p.Pm.listParties;
             listaDePartidosIni = PartidosFactory.inicialiteParties(pd, listaDePartidosIni); 
             //Calculo los escaños
             listaDePartidosIni =DatosPartido.CalculateSeats(listaDePartidosIni);
@@ -211,7 +233,7 @@ namespace LeyDeHont
             dgvParties.ItemsSource = listaDePartidosIni;
             dgvParties.Items.Refresh();
             //
-            p.pm.listParties = null;
+            p.Pm.listParties = null;
             dgvPeople.ItemsSource = null;
             
                 backButton.Visibility = Visibility.Visible;

@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="8.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Imagenes\bandera.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
