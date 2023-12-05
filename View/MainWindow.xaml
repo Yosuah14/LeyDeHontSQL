@@ -81,9 +81,9 @@
                     <!-- DataGrid -->
                     <DataGrid x:Name="dgvParties" Grid.Row="1" AutoGenerateColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Party" Binding="{Binding Nombre}" Width="*"  />
-                            <DataGridTextColumn Header="Votes" Binding="{Binding Votes }" Width="*"  />
-                            <DataGridTextColumn Header="Seats" Binding="{Binding Seats}" Width="*"  />
+                            <DataGridTextColumn Header="Party" Binding="{Binding Nombre ,Mode=TwoWay}" Width="*"  />
+                            <DataGridTextColumn Header="Votes" Binding="{Binding Votes ,Mode=TwoWay }" Width="*"  />
+                            <DataGridTextColumn Header="Seats" Binding="{Binding Seats,Mode=TwoWay}" Width="*"  />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

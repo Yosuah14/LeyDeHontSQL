@@ -16,7 +16,7 @@ namespace LeyDeHont.Domain
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private ObservableCollection<DatosPartido> parties;
-        private const string cnstr = "server=localhost;uid=Jose;pwd=josepablo;database=partidospoliticos";
+        private const string cnstr = "server=localhost;uid=Jose;pwd=josepablo;database=maptrack";
 
 
 
@@ -103,6 +103,17 @@ namespace LeyDeHont.Domain
             string SQL = $"UPDATE datospartido SET nombre = '{Nombre}', acronimo = '{Acronimo}', presidente = '{Presidente}', seats = '{Seats}', votos = '{Votes}' WHERE nombre = '{Nombre}';";
             MySQLDataManagement.ExecuteNonQuery(SQL, cnstr);
         }
+
+        public void UpdatePartySeatsVotes()
+        {
+            string SQL = $"UPDATE datospartido SET seats = '{Seats}', votos = '{Votes}' WHERE nombre = '{Nombre}';";
+            MySQLDataManagement.ExecuteNonQuery(SQL, cnstr);
+        }
+
+
+
+
+
 
         public void LoadParties()
         {
