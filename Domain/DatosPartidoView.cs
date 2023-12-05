@@ -104,16 +104,14 @@ namespace LeyDeHont.Domain
             MySQLDataManagement.ExecuteNonQuery(SQL, cnstr);
         }
 
-        public void UpdatePartySeatsVotes()
+        public void UpdateAllParties()
         {
-            string SQL = $"UPDATE datospartido SET seats = '{Seats}', votos = '{Votes}' WHERE nombre = '{Nombre}';";
-            MySQLDataManagement.ExecuteNonQuery(SQL, cnstr);
+            foreach (DatosPartido partido in Parties)
+            {
+                string SQL = $"UPDATE datospartido SET nombre = '{partido.Nombre}', acronimo = '{partido.Acronimo}', presidente = '{partido.Presidente}', seats = '{partido.Seats}', votos = '{partido.Votes}' WHERE nombre = '{partido.Nombre}';";
+                MySQLDataManagement.ExecuteNonQuery(SQL, cnstr);
+            }
         }
-
-
-
-
-
 
         public void LoadParties()
         {

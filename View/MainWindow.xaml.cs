@@ -58,7 +58,7 @@ namespace LeyDeHont
             else
             {
 
-                if (dgvPeople.Items.Count>9)
+                if (dgvPeople.Items.Count==10)
                 {
                     //Inicializamos el objeto de datos previos
                     PreviousData pd = new PreviousData();
@@ -92,6 +92,7 @@ namespace LeyDeHont
                 {
                     p.addParties(acronimo.Text, nPartido.Text, txtPresidente.Text);
                     dgvPeople.ItemsSource = model.Parties;
+
                     dgvPeople.Items.Refresh();
                     if (model.Parties == null) model.Parties = new ObservableCollection<DatosPartido>();
                     //Si el registro no existe, procedemos a crearlo
@@ -107,6 +108,11 @@ namespace LeyDeHont
                         });
                         //una vez agregado el registro al modelo, lo agregamos a la BDD
                         model.NewUser();
+                       
+                      
+
+                        dgvPeople.ItemsSource = model.Parties;
+                        dgvPeople.Items.Refresh();
                     }
                     else
                     {
@@ -118,11 +124,11 @@ namespace LeyDeHont
                             r.Seats = model.Seats;
                             r.Votes = model.Votes;
                             break;
-
                         }
-
                         //Actualizamos
                         model.UpdateParty();
+                        dgvPeople.ItemsSource = model.Parties;
+                        dgvPeople.Items.Refresh();
                     }
                 }
                 // Todos los campos están llenos y no se ha alcanzado el límite de 10 partidos, puedes agregar la entrada              
@@ -132,7 +138,9 @@ namespace LeyDeHont
         private void btnBorrar_Click(object sender, RoutedEventArgs e)
         {
             //hacemos un casteo de los datos seleccionados
-            List<DatosPartido> partidosABorrar = dgvPeople.SelectedItems.Cast<DatosPartido>().ToList();
+            List<DatosPartido> partidosABorrar = new List<DatosPartido>(model.Parties);
+            partidosABorrar = dgvPeople.SelectedItems.Cast<DatosPartido>().ToList();
+           
             foreach (DatosPartido partido in partidosABorrar)
             {
                 //removemos los partidos de ambas listas
@@ -148,6 +156,7 @@ namespace LeyDeHont
                 // Elimina el elemento seleccionado del modelo y de la base de datos
                 model.DeleteParty(selectedParty.Nombre);
             }
+            dgvPeople.Items.Refresh();
         }
         //Boton para guardas los datos previos
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -243,28 +252,29 @@ namespace LeyDeHont
                 return;
             }
             ObservableCollection<DatosPartido> listaNormal = model.Parties;
-
-            // Utilizas el método PartidosFactory.inicialiteParties con los datos requeridos
+            foreach (DatosPartido partido in model.Parties)
+            {
+                partido.Votes = 0;
+                partido.Seats = 0;
+            }
             List<DatosPartido> listaDePartidosIni = new List<DatosPartido>(listaNormal);
             listaDePartidosIni = PartidosFactory.inicialiteParties(pd, listaDePartidosIni);
-            listaDePartidosIni = DatosPartido.CalculateSeats(listaDePartidosIni);   
-            listaNormal = new ObservableCollection < DatosPartido > (listaDePartidosIni);
-            model.Parties = listaNormal;
-            //Calculo los escaños
-           
-            MessageBox.Show("Se ha reaizado la simulacion");
-
-            foreach (DatosPartido r in model.Parties)
+            listaDePartidosIni = DatosPartido.CalculateSeats(listaDePartidosIni);
+            // Asignar los valores calculados a cada partido individualmente
+            foreach (DatosPartido partido in listaDePartidosIni)
             {
-
-                 model.Seats = r.Seats ;
-                 model.Votes =r.Votes;
-               
-
+                partido.Nombre = partido.Nombre;
+                partido.Seats = partido.Seats; // Reemplaza por la lógica que estás utilizando para calcular los escaños
+                partido.Votes = partido.Votes; // Reemplaza por la lógica que estás utilizando para calcular los votos
             }
 
-            //Actualizamos
-           model.UpdatePartySeatsVotes();
+            listaNormal = new ObservableCollection<DatosPartido>(listaDePartidosIni);
+            model.Parties = listaNormal;
+
+            model.UpdateAllParties();  // Llama al nuevo método para actualizar todos los partidos en la base de datos
+
+            MessageBox.Show("Se ha realizado la simulación");
+
 
             backButton.Visibility = Visibility.Visible;
         }
