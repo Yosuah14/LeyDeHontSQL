@@ -23,14 +23,11 @@ namespace LeyDeHont
             InitializeComponent();
             DataContext = model;
             model.LoadParties();
-
             dgvPeople.ItemsSource = model.Parties;
             PartiesManage pm = new PartiesManage();
             TextBox2.TextChanged += changeNullVotes;
             TextBox3.TextChanged += changeNullVotes;
             p = new DatosPartido();
-
-
         }
         //Metodo para insertar partidos
         private void btnInsert_Click(object sender, RoutedEventArgs e)
@@ -48,7 +45,6 @@ namespace LeyDeHont
                     previousdata.Focus();
                     vista = true;
                 }
-
             }
             //Contralos que se completen los 3 campos
             if (string.IsNullOrEmpty(acronimo.Text) || string.IsNullOrEmpty(nPartido.Text) || string.IsNullOrEmpty(txtPresidente.Text))
@@ -57,13 +53,11 @@ namespace LeyDeHont
             }
             else
             {
-
-                if (dgvPeople.Items.Count==10)
+                if (model.Parties.Count==10)
                 {
                     //Inicializamos el objeto de datos previos
                     PreviousData pd = new PreviousData();
                     int text1, text2, text3;
-
                     if (!string.IsNullOrEmpty(TextBox1.Text) && !string.IsNullOrEmpty(TextBox2.Text) && !string.IsNullOrEmpty(TextBox3.Text) &&
                         int.TryParse(TextBox1.Text, out text1) && int.TryParse(TextBox2.Text, out text2) && int.TryParse(TextBox3.Text, out text3))
                     {
@@ -137,27 +131,32 @@ namespace LeyDeHont
         //Boton de borrar
         private void btnBorrar_Click(object sender, RoutedEventArgs e)
         {
-            //hacemos un casteo de los datos seleccionados
-            List<DatosPartido> partidosABorrar = new List<DatosPartido>(model.Parties);
-            partidosABorrar = dgvPeople.SelectedItems.Cast<DatosPartido>().ToList();
-           
+            // Realizamos un casting de los datos seleccionados
+            List<DatosPartido> partidosABorrar = dgvPeople.SelectedItems.Cast<DatosPartido>().ToList();
+
             foreach (DatosPartido partido in partidosABorrar)
             {
-                //removemos los partidos de ambas listas
+                // Removemos los partidos de ambas listas
                 p.removeParties(partido);
                 p.Pm.listParties.Remove(partido);
             }
+
+            // Actualizamos la interfaz gráfica
             dgvPeople.Items.Refresh();
 
+            // Obtenemos el partido seleccionado actualmente
             var selectedParty = dgvPeople.SelectedItem as DatosPartido;
 
             if (selectedParty != null)
             {
-                // Elimina el elemento seleccionado del modelo y de la base de datos
+                // Eliminamos el elemento seleccionado del modelo y de la base de datos
                 model.DeleteParty(selectedParty.Nombre);
             }
+
+            // Actualizamos nuevamente la interfaz gráfica
             dgvPeople.Items.Refresh();
         }
+
         //Boton para guardas los datos previos
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {

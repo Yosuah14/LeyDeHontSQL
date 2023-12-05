@@ -16,10 +16,7 @@ namespace LeyDeHont.Domain
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private ObservableCollection<DatosPartido> parties;
-        private const string cnstr = "server=localhost;uid=Jose;pwd=josepablo;database=maptrack";
-
-
-
+        private const string cnstr = "server=localhost;uid=Jose;pwd=josepablo;database=partidospoliticos";
 
         public ObservableCollection<DatosPartido> Parties
         {
