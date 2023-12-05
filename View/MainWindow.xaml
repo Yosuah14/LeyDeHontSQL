@@ -44,18 +44,18 @@
                     </Grid.ColumnDefinitions>
                     <DataGrid x:Name="dgvPeople" AutoGenerateColumns="False" IsReadOnly="True" Margin="5" SelectionChanged="dgvPeople_SelectionChanged" >
                         <DataGrid.Columns  >
-                            <DataGridTextColumn Header="Acronimo" Width="25*" Binding="{Binding Acronimo}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Nombre Partido" Width="33*" Binding="{Binding Nombre}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Presidente" Width="20*" Binding="{Binding Presidente}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Acronimo" Width="25*" Binding="{Binding Acronimo,Mode=TwoWay}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Nombre Partido" Width="33*" Binding="{Binding Nombre ,Mode=TwoWay}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Presidente" Width="20*" Binding="{Binding Presidente ,Mode=TwoWay}"></DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Orientation="Vertical" Grid.Column="1">
                         <Label Content="Acronimo" FontWeight="Bold" Margin=" 5" HorizontalAlignment="Center"/>
-                        <TextBox x:Name="acronimo" Margin="5"></TextBox>
+                        <TextBox x:Name="acronimo" Margin="5"  Text="{Binding Acronimo,Mode=TwoWay}"></TextBox>
                         <Label Content="Nombre del partido" FontWeight="Bold" Margin=" 5" HorizontalAlignment="Center"/>
-                        <TextBox x:Name="nPartido" Margin="5"></TextBox>
+                        <TextBox x:Name="nPartido" Margin="5" Text="{Binding Nombre,Mode=TwoWay}"></TextBox>
                         <Label Content="Presidente" FontWeight="Bold" Margin=" 5" HorizontalAlignment="Center"/>
-                        <TextBox x:Name="txtPresidente" Margin="5"></TextBox>
+                        <TextBox x:Name="txtPresidente" Margin="5" Text="{Binding Presidente,Mode=TwoWay}"></TextBox>
                         <Button x:Name="btnExample" Margin="5" Content="Insertar" Click="btnInsert_Click"/>
                         <Button x:Name="btnBorrado" Margin="5" Content="Borrar" Click="btnBorrar_Click" Visibility="Collapsed" />
                     </StackPanel>
@@ -82,8 +82,8 @@
                     <DataGrid x:Name="dgvParties" Grid.Row="1" AutoGenerateColumns="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Party" Binding="{Binding Nombre}" Width="*"  />
-                            <DataGridTextColumn Header="Votes" Binding="{Binding votes }" Width="*"  />
-                            <DataGridTextColumn Header="Seats" Binding="{Binding seats}" Width="*"  />
+                            <DataGridTextColumn Header="Votes" Binding="{Binding Votes }" Width="*"  />
+                            <DataGridTextColumn Header="Seats" Binding="{Binding Seats}" Width="*"  />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

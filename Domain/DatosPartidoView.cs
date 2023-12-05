@@ -27,7 +27,7 @@ namespace LeyDeHont.Domain
             set
             {
                 parties = value;
-                OnPropertyChange("users");
+                OnPropertyChange("Parties");
             }
         }
 
@@ -38,7 +38,7 @@ namespace LeyDeHont.Domain
             set
             {
                 acronimo = value;
-                OnPropertyChange(nameof(Acronimo));
+                OnPropertyChange("Acronimo");
             }
         }
 
@@ -49,7 +49,7 @@ namespace LeyDeHont.Domain
             set
             {
                 nombre = value;
-                OnPropertyChange(nameof(Nombre));
+                OnPropertyChange("Nombre");
             }
         }
 
@@ -60,7 +60,7 @@ namespace LeyDeHont.Domain
             set
             {
                 presidente = value;
-                OnPropertyChange(nameof(Presidente));
+                OnPropertyChange("Presidente");
             }
         }
 
@@ -71,7 +71,7 @@ namespace LeyDeHont.Domain
             set
             {
                 votes = value;
-                OnPropertyChange(nameof(Votes));
+                OnPropertyChange("Votes");
             }
         }
 
@@ -82,13 +82,13 @@ namespace LeyDeHont.Domain
             set
             {
                 seats = value;
-                OnPropertyChange(nameof(Seats));
+                OnPropertyChange("Seats");
             }
         }
 
         private void OnPropertyChange(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public void NewUser()
@@ -106,7 +106,7 @@ namespace LeyDeHont.Domain
 
         public void LoadParties()
         {
-            string SQL = $"SELECT partidoId, nombre, acronimo, presidente, seats, votos FROM datospartido;";
+            string SQL = $"SELECT  nombre, acronimo, presidente, seats, votos FROM datospartido;";
             DataTable dt = MySQLDataManagement.LoadData(SQL, cnstr);
             if (dt.Rows.Count > 0)
             {
@@ -116,15 +116,28 @@ namespace LeyDeHont.Domain
                     parties.Add(new DatosPartido
                     {
                        
-                        Nombre = row[1].ToString(),
-                        Acronimo = row[2].ToString(),
-                        Presidente = row[3].ToString(),
-                        Seats = Convert.ToInt32(row[4]),
-                        Votes = Convert.ToInt32(row[5])
+                        Nombre = row[0].ToString(),
+                        Acronimo = row[1].ToString(),
+                        Presidente = row[2].ToString(),
+                        Seats = Convert.ToInt32(row[3]),
+                        Votes = Convert.ToInt32(row[4])
                     });
                 }
             }
             dt.Dispose();
+        }
+        public void DeleteParty(string partyName)
+        {
+            // Realiza la eliminación del partido en la base de datos
+            String SQL = $"DELETE FROM datospartido WHERE nombre = '{partyName}';";
+            MySQLDataManagement.ExecuteNonQuery(SQL, cnstr);
+
+            // Elimina el partido de la colección local
+            var partyToDelete = parties.FirstOrDefault(p => p.Nombre == partyName);
+            if (partyToDelete != null)
+            {
+                parties.Remove(partyToDelete);
+            }
         }
 
     }

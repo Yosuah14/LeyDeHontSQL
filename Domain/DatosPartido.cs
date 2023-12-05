@@ -15,13 +15,14 @@ namespace LeyDeHont.Domain
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private string acronimo;
+      
         public string Acronimo
         {
             get { return acronimo; }
             set
             {
                 acronimo = value;
-                OnPropertyChange(nameof(Acronimo));
+                OnPropertyChange("Acronimo");
             }
         }
 
@@ -32,7 +33,7 @@ namespace LeyDeHont.Domain
             set
             {
                 nombre = value;
-                OnPropertyChange(nameof(Nombre));
+                OnPropertyChange("Nombre");
             }
         }
 
@@ -43,7 +44,7 @@ namespace LeyDeHont.Domain
             set
             {
                 presidente = value;
-                OnPropertyChange(nameof(Presidente));
+                OnPropertyChange("Presidente");
             }
         }
 
@@ -54,7 +55,7 @@ namespace LeyDeHont.Domain
             set
             {
                 votes = value;
-                OnPropertyChange(nameof(Votes));
+                OnPropertyChange("Votes");
             }
         }
 
@@ -65,7 +66,7 @@ namespace LeyDeHont.Domain
             set
             {
                 seats = value;
-                OnPropertyChange(nameof(Seats));
+                OnPropertyChange("Seats");
             }
         }
 
