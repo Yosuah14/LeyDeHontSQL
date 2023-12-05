@@ -53,7 +53,34 @@ namespace LeyDeHont
             }
             else
             {
-                if (model.Parties.Count==10)
+                if (model.Parties == null)
+                {
+                    p.addParties(acronimo.Text, nPartido.Text, txtPresidente.Text);
+                    dgvPeople.ItemsSource = model.Parties;
+
+                    dgvPeople.Items.Refresh();
+                    if (model.Parties == null) model.Parties = new ObservableCollection<DatosPartido>();
+                    //Si el registro no existe, procedemos a crearlo
+                    if (model.Parties.Where(x => x.Nombre == model.Nombre).FirstOrDefault() == null)
+                    {
+                        model.Parties.Add(new DatosPartido
+                        {
+                            Nombre = model.Nombre,
+                            Acronimo = model.Acronimo,
+                            Presidente = model.Presidente,
+                            Seats = model.Seats,
+                            Votes = model.Votes
+                        });
+                        //una vez agregado el registro al modelo, lo agregamos a la BDD
+                        model.NewUser();
+
+
+
+                        dgvPeople.ItemsSource = model.Parties;
+                        dgvPeople.Items.Refresh();
+                    }
+                }
+                if (model.Parties.Count>9)
                 {
                     //Inicializamos el objeto de datos previos
                     PreviousData pd = new PreviousData();
@@ -273,6 +300,7 @@ namespace LeyDeHont
             model.UpdateAllParties();  // Llama al nuevo método para actualizar todos los partidos en la base de datos
 
             MessageBox.Show("Se ha realizado la simulación");
+            model.Parties = new ObservableCollection<DatosPartido>(p.Pm.listParties);
 
 
             backButton.Visibility = Visibility.Visible;
